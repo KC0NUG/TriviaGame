@@ -1,0 +1,33 @@
+/* Week 5 homework:Totally Trivial Trivia
+// Charles Simpson @KC0NUG*/
+
+.jumbotron {
+    text-align: center;
+    padding: 0.5em 0.6em;
+    opacity: .7;
+    color: yellow;
+    background-color: black;
+}
+
+.btn {
+    color: yellow;
+    border: 2px solid black;
+    text-align: center;
+    border-radius: 10px;
+    background-color: black;
+    font-size: 12pt;
+}
+
+.answer:hover {
+    background: white;
+}
+
+body {
+    background: url('../images/bttfMoviePoster.jpg') no-repeat top center fixed;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    color: yellow;
+    text-align: center;
+}

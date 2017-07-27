@@ -10,22 +10,26 @@ var timeToAnswerQuestion =30;
 var timerCounter = timeToAnswerQuestion;
 var timeBetweenSelections = 2500;
 
-
 var questionsArray = [
     "Question #1 Hint: You should answer 2nd Choice?",
-    "Question #2 Hint: You should answer 1st Choice?"
+    "Question #2 Hint: You should answer 1st Choice?",
+    "Question #3 Hint: You should answer true?",
+    "Question #3 Hint: You should answer false?"
 ];
+
 var distractorArray = [
     ["1st Choice", "2nd Choice", "3rd Choice", "4th Choice"],
-    ["1st Choice", "2nd Choice", "3rd Choice", "4th Choice"]
+    ["1st Choice", "2nd Choice", "3rd Choice", "4th Choice"],
+    ["False", "True"],
+    ["False", "True"]
 ];
 
-// change to a number to represet the correct answer
 var correctArray = [
-    "2nd Choice",
-    "1st Choice"
+    1,
+    0,
+    1,
+    0
 ];
-
 
 
 $("#startGame").on("click", function(event) {
@@ -38,7 +42,7 @@ $("#startGame").on("click", function(event) {
 $("body").on("click", ".answer", function(event) {
     event.preventDefault();
     selectedAnswer = $(this).text();
-    if (selectedAnswer === correctArray[questionNumber]) {
+    if ( correctArray[questionNumber] === distractorArray[questionNumber].indexOf(selectedAnswer)){
         clearInterval(time);
         correctAnswer();
     } else {
@@ -71,14 +75,14 @@ function clock() {
     }
 }
 
-function generateHTML() {    
-    gameHTML = "<h2 class='text-center timer-p'>Time Remaining: <span class='timer'>" +
-        timerCounter + "</span></h2><h3 class='text-center'>" + questionsArray[questionNumber] +
-        "</h3><h3 class='answer'>" + distractorArray[questionNumber][0] +
-        "</h3><h3 class='answer'>" + distractorArray[questionNumber][1] + 
-        "</h3><h3 class='answer'>" + distractorArray[questionNumber][2] + 
-        "</h3><h3 class='answer'>" + distractorArray[questionNumber][3] + 
-        "</h3>";
+function generateHTML() {  
+    gameHTML = "<h2 class='text-center timer-p'>Time Remaining: <span class='timer'>" 
+        + timerCounter + "</span></h2><h3 class='text-center'>" + questionsArray[questionNumber];
+    for (var i = 0; i < distractorArray[questionNumber].length; i++) {
+        gameHTML += "</h3><h3 class='answer'>";
+        gameHTML += distractorArray[questionNumber][i];
+    }
+    gameHTML += "</h3>";   
     $(".gameDiv").html(gameHTML);    
 };
 
@@ -86,7 +90,7 @@ function correctAnswer() {
     correctNum++;
     gameHTML = "<h2 class='text-center timer-p'>Time Remaining: <span class='timer'>" +
         timerCounter + "</span></h2><h3 class='text-center'>Correct! The answer is: " +
-        correctArray[questionNumber] + "</h3>";
+        distractorArray[questionNumber][correctArray[questionNumber]] + "</h3>";
     $(".gameDiv").html(gameHTML);
     setTimeout(wait, timeBetweenSelections);
 }
@@ -95,7 +99,7 @@ function wrongAnswer() {
     incorrectNum++;
     gameHTML = "<h2 class='text-center timer-p'>Time Remaining: <span class='timer'>" +
         timerCounter + "</span></h2><h3 class='text-center'>Incorrect! The answer is: " +
-        correctArray[questionNumber] + "</h3>";
+        distractorArray[questionNumber][correctArray[questionNumber]] + "</h3>";
     $(".gameDiv").html(gameHTML);
     setTimeout(wait, timeBetweenSelections);
 }
@@ -104,7 +108,7 @@ function questionTimeout() {
     notAnsweredNum++;
     gameHTML = "<h2 class='text-center timer-p'>Time Remaining: <span class='timer'>" +
         timerCounter + "</span></h2><h3 class='text-center'>You ran out of time!</h3>" +
-        "<h3>The correct answer is: " + correctArray[questionNumber] + "</h3>";
+        "<h3>The correct answer is: " + distractorArray[questionNumber][correctArray[questionNumber]] + "</h3>";
     $(".gameDiv").html(gameHTML);
     setTimeout(wait, timeBetweenSelections);
 }
@@ -134,4 +138,3 @@ function resetGame() {
     generateHTML();
     clock();
 }
-

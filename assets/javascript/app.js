@@ -8,27 +8,70 @@ var questionNumber = 0;
 var time = 0;
 var timeToAnswerQuestion =30;
 var timerCounter = timeToAnswerQuestion;
-var timeBetweenSelections = 2500;
+var timeBetweenSelections = 3500;
 
 var questionsArray = [
-    "Question #1 Hint: You should answer 2nd Choice?",
-    "Question #2 Hint: You should answer 1st Choice?",
-    "Question #3 Hint: You should answer true?",
-    "Question #3 Hint: You should answer false?"
+    "Name that album: ?",
+    "Name that album: ?",    
+    "Name that album: ?",
+    "Name that album: ?",
+    "Name that album: ?",
+    "Founding guitarist and principal songwriter: ?",
+    "Name that album: ?",
+    "This post card was included with which album: ?",
+    "Shine on You Crazy Diamond, Pts. 1-9,Welcome to the Machine, and 'Which ones Pink' is which album: ?",
+    "Where was this Pink Floyd 1971 movie recorded: ?"
 ];
 
 var distractorArray = [
-    ["1st Choice", "2nd Choice", "3rd Choice", "4th Choice"],
-    ["1st Choice", "2nd Choice", "3rd Choice", "4th Choice"],
-    ["False", "True"],
-    ["False", "True"]
+    ["Atom Heart Mother", "Animals", "The Final Cut", "Pigs on a Wing"],
+    ["Atom Heart Mother", "Animals", "The Final Cut", "Pigs on a Wing"],
+    ["Atom Heart Mother", "Animals", "The Final Cut", "Dark Side of the Moon"],
+    ["Obscured By Clouds", "Animals", "Meddle", "Dark Side of the Moon"],
+    ["Obscured By Clouds", "Animals", "Meddle", "Dark Side of the Moon"],
+    ["David Gilmore","Syd Barrett"],
+    ["Wish You Were Here","Ummagumma","Echos", "Welcome to the Machine"],
+    ["Wish You Were Here","Ummagumma","Echos", "Welcome to the Machine"],
+    ["Ummagumma","Echos", "Welcome to the Machine","Wish You Were Here"],
+    ["Rome","Greece","Pompeii"]
 ];
 
 var correctArray = [
     1,
     0,
+    3,
+    2,
+    0,
     1,
-    0
+    1,
+    0,
+    3,
+    2
+];
+
+var hasPicArray = [ 
+    true,
+    true,
+    true,
+    true,
+    true,
+    false,
+    true,
+    true,
+    false,
+    true
+];
+
+var picArray = [ "assets/images/Animals.jpg",
+    "assets/images/AtomHeartMother.jpg",
+    "assets/images/DarkSideofthemoon.jpg",
+    "assets/images/Meddle.jpg",
+    "assets/images/Obscuredbyclouds.jpg",
+    "",
+    "assets/images/Umaguma.jpg",
+    "assets/images/pfwywh_lp_japan_postcard_front.jpg",
+    "",
+    "assets/images/pinkfloydpompeii.jpg"
 ];
 
 
@@ -41,8 +84,8 @@ $("#startGame").on("click", function(event) {
 
 $("body").on("click", ".answer", function(event) {
     event.preventDefault();
-    selectedAnswer = $(this).text();
-    if ( correctArray[questionNumber] === distractorArray[questionNumber].indexOf(selectedAnswer)){
+    var indexOfAnswer = $(this).attr("ans-data"); 
+    if ( correctArray[questionNumber] == indexOfAnswer) {
         clearInterval(time);
         correctAnswer();
     } else {
@@ -77,20 +120,41 @@ function clock() {
 
 function generateHTML() {  
     gameHTML = "<h2 class='text-center timer-p'>Time Remaining: <span class='timer'>" 
-        + timerCounter + "</span></h2><h3 class='text-center'>" + questionsArray[questionNumber];
-    for (var i = 0; i < distractorArray[questionNumber].length; i++) {
-        gameHTML += "</h3><h3 class='answer'>";
-        gameHTML += distractorArray[questionNumber][i];
+        + timerCounter + "</span></h2><h3 class='text-center'>" 
+        + questionsArray[questionNumber] + "</h3><br>";
+
+    if (hasPicArray[questionNumber]){
+        gameHTML += '<img src="';
+        gameHTML += picArray[questionNumber];
+        gameHTML += '" alt="pinkfloydpic" class="img-thumbnail" style="width:300px;height:300px"><br>';
     }
-    gameHTML += "</h3>";   
+
+    for (var i = 0; i < distractorArray[questionNumber].length; i++) {        
+        gameHTML += `<button ans-data="${i}" type="button" class="btn btn-primary answer">`;    
+        gameHTML += distractorArray[questionNumber][i]; 
+        gameHTML += '</button><br>';
+    }  
     $(".gameDiv").html(gameHTML);    
 };
 
 function correctAnswer() {
     correctNum++;
     gameHTML = "<h2 class='text-center timer-p'>Time Remaining: <span class='timer'>" +
-        timerCounter + "</span></h2><h3 class='text-center'>Correct! The answer is: " +
-        distractorArray[questionNumber][correctArray[questionNumber]] + "</h3>";
+        timerCounter + "</span></h2><h3 class='text-center good'>Correct! The answer is: " +
+        distractorArray[questionNumber][correctArray[questionNumber]];
+    if (hasPicArray[questionNumber]){
+        gameHTML += '<br><img src="';
+        gameHTML += picArray[questionNumber];
+        gameHTML += '" alt="pinkfloydpic" class="img-thumbnail" style="width:300px;height:300px">';
+    }
+
+    if (questionNumber===8){
+        gameHTML += '<br><img src="assets/images/Wishyouwherehere.jpg"';
+        gameHTML += '" alt="pinkfloydpic" class="img-thumbnail" style="width:300px;height:300px">';
+        gameHTML += '<img src="assets/images/WishYouWhereHerelg.jpg"';
+        gameHTML += '" alt="pinkfloydpic" class="img-thumbnail" style="width:300px;height:300px">';
+    }
+    gameHTML +="</h3>";
     $(".gameDiv").html(gameHTML);
     setTimeout(wait, timeBetweenSelections);
 }
@@ -98,8 +162,20 @@ function correctAnswer() {
 function wrongAnswer() {   
     incorrectNum++;
     gameHTML = "<h2 class='text-center timer-p'>Time Remaining: <span class='timer'>" +
-        timerCounter + "</span></h2><h3 class='text-center'>Incorrect! The answer is: " +
-        distractorArray[questionNumber][correctArray[questionNumber]] + "</h3>";
+        timerCounter + "</span></h2><h3 class='text-center bad'>Incorrect! The answer is: " +
+        distractorArray[questionNumber][correctArray[questionNumber]];
+    if (hasPicArray[questionNumber]){
+        gameHTML += '<br><img src="';
+        gameHTML += picArray[questionNumber];
+        gameHTML += '" alt="pinkfloydpic" class="img-thumbnail" style="width:300px;height:300px"><br>';
+    }
+    if (questionNumber===8){
+        gameHTML += '<br><img src="assets/images/Wishyouwherehere.jpg"';
+        gameHTML += '" alt="pinkfloydpic" class="img-thumbnail" style="width:300px;height:300px">';
+        gameHTML += '<img src="assets/images/WishYouWhereHerelg.jpg"';
+        gameHTML += '" alt="pinkfloydpic" class="img-thumbnail" style="width:300px;height:300px">';
+    }
+    gameHTML +="</h3>";
     $(".gameDiv").html(gameHTML);
     setTimeout(wait, timeBetweenSelections);
 }
@@ -115,7 +191,7 @@ function questionTimeout() {
 
 function endOfGame() {   
     gameHTML = "<h2 class='text-center timer-p'>Time Remaining: <span class='timer'>" +
-        timerCounter + "</span></h2><h3 class='text-center'>All done, here's how you did!</h3>" +
+        timerCounter + "</span></h2><h3 class='text-center' id='all_done'>All done, here's how you did!</h3>" +
         "<h3 class='summary-correct'>Correct Answers: " + correctNum +
         "</h3><h3>Incorrect Answers: " + incorrectNum + "</h3><h3>Unanswered: " +
         notAnsweredNum + "</h3>" +

@@ -1,29 +1,58 @@
 /* Week 5 homework:Totally Trivial Trivia
 // Charles Simpson @KC0NUG*/
 
-.jumbotron {
+.head {
     text-align: center;
-    padding: 0.5em 0.6em;
-    opacity: .7;
-    color: yellow;
-    background-color: black;
+    padding: 0.5em 0.6em;   
+    color: yellow;  
+}
+
+#header2 {
+    color: #FF070D;
 }
 
 .btn {
-    color: yellow;
+    color: white;
     border: 2px solid black;
     text-align: center;
     border-radius: 10px;
-    background-color: black;
+    background-color: blue;
     font-size: 12pt;
 }
 
+.btn:hover {
+    background: green;
+    color: black; 
+}
+
 .answer:hover {
-    background: white;
+    background: green;
+    color: black;
+}
+
+.timer-p {
+    color: #E740FF;
+}
+
+
+#all_done {
+    color: blue;
+}
+
+.timer {
+    color: #3E81FF;
+}
+
+.good {
+    color: green;
+}
+
+.bad {
+    color: red;
 }
 
 body {
-    background: url('../images/bttfMoviePoster.jpg') no-repeat top center fixed;
+    background: url('../images/PinkFloyd.jpg') no-repeat top center fixed;
     -moz-background-size: cover;
     -webkit-background-size: cover;
     -o-background-size: cover;
